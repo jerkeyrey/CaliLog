@@ -1,5 +1,6 @@
 import Navbar from "../components/navbar";
 import Link from "next/link";
+import { Github, Instagram, Twitter, Facebook, Linkedin } from "lucide-react";
 
 export default function LandingPage() {
   return (
@@ -75,31 +76,104 @@ export default function LandingPage() {
               </p>
             </div>
           </div>
-          <Link
-            href="/user-form"
-            className="mt-8 inline-block bg-blue-500 hover:bg-blue-600 px-8 py-4 rounded-full text-xl font-semibold text-white"
-          >
-            Join Now
-          </Link>
         </section>
 
-        {/* Call to Action */}
-        <section className="mt-20 bg-blue-500 text-white py-16 px-6 rounded-lg shadow-lg max-w-6xl">
-          <h2 className="text-4xl font-extrabold mb-6">
-            Start Your Journey Today!
-          </h2>
-          <p className="text-lg mb-8">
-            Take the first step towards a healthier lifestyle. Join CaliLog and
-            start tracking your calories, setting goals, and achieving your
-            fitness dreams.
-          </p>
-          <Link
-            href="/user-form"
-            className="inline-block bg-white text-blue-500 hover:bg-gray-100 px-10 py-4 rounded-full text-xl font-semibold shadow-md transition"
-          >
-            Sign Up for Free
-          </Link>
-        </section>
+        {/* Footer */}
+        <footer className="w-full bg-gray-900 text-gray-300 mt-20 border-t border-gray-800">
+          <div className="container mx-auto px-4 py-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              {/* Company Info */}
+              <div>
+                <h3 className="text-2xl font-bold text-white mb-4">CaliLog</h3>
+                <p className="text-gray-400 mb-6">
+                  Making calorie tracking simple and effective for everyone.
+                </p>
+                <div className="flex items-center justify-center md:justify-start gap-6">
+                  <Facebook
+                    className="w-6 h-6 text-gray-400 hover:text-blue-500 cursor-default transition-colors"
+                    aria-hidden="true"
+                  />
+                  <Twitter
+                    className="w-6 h-6 text-gray-400 hover:text-blue-400 cursor-default transition-colors"
+                    aria-hidden="true"
+                  />
+                  <Instagram
+                    className="w-6 h-6 text-gray-400 hover:text-pink-500 cursor-default transition-colors"
+                    aria-hidden="true"
+                  />
+                  <Github
+                    className="w-6 h-6 text-gray-400 hover:text-white cursor-default transition-colors"
+                    aria-hidden="true"
+                  />
+                  <Linkedin
+                    className="w-6 h-6 text-gray-400 hover:text-blue-600 cursor-default transition-colors"
+                    aria-hidden="true"
+                  />
+                </div>
+              </div>
+
+              {/* Quick Links */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4">
+                  Quick Links
+                </h3>
+                <ul className="space-y-2">
+                  <li>
+                    <Link
+                      href="/about"
+                      className="text-gray-400 hover:text-white transition-colors"
+                    >
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/features"
+                      className="text-gray-400 hover:text-white transition-colors"
+                    >
+                      Features
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/privacy"
+                      className="text-gray-400 hover:text-white transition-colors"
+                    >
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/terms"
+                      className="text-gray-400 hover:text-white transition-colors"
+                    >
+                      Terms of Service
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Contact Info */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4">
+                  Contact Us
+                </h3>
+                <div className="space-y-2">
+                  <p className="text-gray-400">Email: support@calilog.com</p>
+                  <p className="text-gray-400">Phone: (555) 123-4567</p>
+                  <p className="text-gray-400">Location: San Francisco, CA</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Copyright */}
+            <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+              <p className="text-gray-500">
+                © {new Date().getFullYear()} CaliLog. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </footer>
       </main>
     </div>
   );
