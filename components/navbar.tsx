@@ -31,6 +31,11 @@ export default async function Navbar() {
               Contact
             </Link>
           </li>
+          <li>
+            <Link href="/diary" className="hover:text-gray-400">
+              Diary
+            </Link>
+          </li>
         </ul>
         <div className="flex items-center space-x-4">
           {session?.user ? <UserDisplay /> : <SignIn />}

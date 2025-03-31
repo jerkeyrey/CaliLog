@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useCalories } from "@/context/CaloriesContext";
 
 export default function UserForm() {
   const [step, setStep] = useState(0);
@@ -17,6 +18,8 @@ export default function UserForm() {
     bmi: number | null;
     calories: number | null;
   }>({ bmi: null, calories: null });
+
+  const { setMaintenanceCalories } = useCalories();
 
   const steps = [
     {
@@ -129,6 +132,7 @@ export default function UserForm() {
       bmi: Math.round(bmi * 10) / 10,
       calories: Math.round(adjustedCalories),
     });
+    setMaintenanceCalories(Math.round(adjustedCalories));
   };
 
   const getBMIStatus = (
