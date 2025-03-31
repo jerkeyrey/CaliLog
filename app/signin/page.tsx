@@ -17,7 +17,7 @@ export default function SignIn() {
         </div>
 
         <button
-          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+          onClick={() => signIn("google", { callbackUrl: "/" })}
           className="w-full flex items-center justify-center gap-3 bg-gray-700 border border-gray-600 p-4 rounded-lg 
                      hover:bg-gray-600 transition-all duration-200 group"
         >
