@@ -1,4 +1,5 @@
 import Navbar from "../components/navbar";
+import Link from "next/link";
 
 export default function LandingPage() {
   return (
@@ -15,12 +16,12 @@ export default function LandingPage() {
             CaliLog helps you monitor your daily food intake, stay on top of
             your fitness goals, and make healthier choices.
           </p>
-          <a
-            href="/register"
+          <Link
+            href="/user-form"
             className="mt-10 inline-block bg-blue-500 hover:bg-blue-600 px-10 py-4 rounded-full text-xl font-semibold"
           >
             Get Started
-          </a>
+          </Link>
         </section>
 
         {/* Features Section */}
@@ -74,12 +75,12 @@ export default function LandingPage() {
               </p>
             </div>
           </div>
-          <a
-            href="/register"
+          <Link
+            href="/user-form"
             className="mt-8 inline-block bg-blue-500 hover:bg-blue-600 px-8 py-4 rounded-full text-xl font-semibold text-white"
           >
             Join Now
-          </a>
+          </Link>
         </section>
 
         {/* Call to Action */}
@@ -92,12 +93,12 @@ export default function LandingPage() {
             start tracking your calories, setting goals, and achieving your
             fitness dreams.
           </p>
-          <a
-            href="/register"
+          <Link
+            href="/user-form"
             className="inline-block bg-white text-blue-500 hover:bg-gray-100 px-10 py-4 rounded-full text-xl font-semibold shadow-md transition"
           >
             Sign Up for Free
-          </a>
+          </Link>
         </section>
       </main>
     </div>
