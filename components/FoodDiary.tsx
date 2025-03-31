@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useCalories } from "@/context/CaloriesContext";
 import { storage, type FoodEntry } from "@/utils/storage";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   Trash2,
   Plus,
@@ -30,7 +29,6 @@ export default function FoodDiary() {
     calories: "",
   });
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     const loadEntries = async () => {
