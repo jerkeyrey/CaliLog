@@ -8,7 +8,8 @@ export default async function UserDisplay() {
   if (!session?.user) return null;
 
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center gap-4">
+      <SignOut />
       {session.user.image && (
         <Image
           src={session.user.image}
@@ -18,7 +19,6 @@ export default async function UserDisplay() {
           className="rounded-full border-2 border-blue-500"
         />
       )}
-      <SignOut />
     </div>
   );
 }

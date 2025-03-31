@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCalories } from "@/context/CaloriesContext";
+import { storage, type FoodEntry } from "@/utils/storage";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Trash2,
   Plus,
@@ -12,13 +14,6 @@ import {
   Check,
   X,
 } from "lucide-react";
-
-type FoodEntry = {
-  id: number;
-  food: string;
-  portion: string;
-  calories: number;
-};
 
 export default function FoodDiary() {
   const { maintenanceCalories } = useCalories();
@@ -34,12 +29,44 @@ export default function FoodDiary() {
     portion: "",
     calories: "",
   });
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const loadEntries = async () => {
+      try {
+        setIsLoading(true);
+        const savedEntries = await storage.getTodaysFoodEntries();
+        if (Array.isArray(savedEntries)) {
+          console.log("Loaded entries:", savedEntries);
+          setEntries(savedEntries);
+        } else {
+          console.error("Invalid entries format:", savedEntries);
+          setEntries([]);
+        }
+      } catch (error) {
+        console.error("Failed to load entries:", error);
+        setEntries([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadEntries();
+  }, []);
 
   const getCalorieColor = (calories: number) => {
     if (calories > 500) return "text-red-400";
     if (calories > 300) return "text-yellow-400";
     return "text-green-400";
   };
+
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto p-8 text-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
 
   if (!maintenanceCalories) {
     return (
@@ -62,25 +89,37 @@ export default function FoodDiary() {
     );
   }
 
-  const addEntry = (e: React.FormEvent) => {
+  const addEntry = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newEntry.food || !newEntry.portion || !newEntry.calories) return;
 
-    setEntries([
-      ...entries,
-      {
+    try {
+      const today = new Date().toISOString().split("T")[0];
+      const newEntryItem: FoodEntry = {
         id: Date.now(),
         food: newEntry.food,
         portion: newEntry.portion,
         calories: Number(newEntry.calories),
-      },
-    ]);
+        date: today,
+      };
 
-    setNewEntry({ food: "", portion: "", calories: "" });
+      const updatedEntries = [...entries, newEntryItem];
+      await storage.saveFoodEntries(updatedEntries);
+      setEntries(updatedEntries);
+      setNewEntry({ food: "", portion: "", calories: "" });
+    } catch (error) {
+      console.error("Failed to add entry:", error);
+    }
   };
 
-  const removeEntry = (id: number) => {
-    setEntries(entries.filter((entry) => entry.id !== id));
+  const removeEntry = async (id: number) => {
+    const updatedEntries = entries.filter((entry) => entry.id !== id);
+    try {
+      await storage.saveFoodEntries(updatedEntries);
+      setEntries(updatedEntries);
+    } catch (error) {
+      console.error("Failed to remove entry:", error);
+    }
   };
 
   const startEditing = (entry: FoodEntry) => {
@@ -97,24 +136,28 @@ export default function FoodDiary() {
     setEditForm({ food: "", portion: "", calories: "" });
   };
 
-  const saveEdit = (id: number) => {
+  const saveEdit = async (id: number) => {
     if (!editForm.food || !editForm.portion || !editForm.calories) return;
 
-    setEntries(
-      entries.map((entry) =>
-        entry.id === id
-          ? {
-              ...entry,
-              food: editForm.food,
-              portion: editForm.portion,
-              calories: Number(editForm.calories),
-            }
-          : entry
-      )
+    const updatedEntries = entries.map((entry) =>
+      entry.id === id
+        ? {
+            ...entry,
+            food: editForm.food,
+            portion: editForm.portion,
+            calories: Number(editForm.calories),
+          }
+        : entry
     );
 
-    setEditingId(null);
-    setEditForm({ food: "", portion: "", calories: "" });
+    try {
+      await storage.saveFoodEntries(updatedEntries);
+      setEntries(updatedEntries);
+      setEditingId(null);
+      setEditForm({ food: "", portion: "", calories: "" });
+    } catch (error) {
+      console.error("Failed to save edit:", error);
+    }
   };
 
   const totalCalories = entries.reduce((sum, entry) => sum + entry.calories, 0);

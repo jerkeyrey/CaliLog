@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCalories } from "@/context/CaloriesContext";
+import { storage } from "@/utils/storage";
+import Link from "next/link";
 
 export default function UserForm() {
   const [step, setStep] = useState(0);
@@ -20,6 +22,33 @@ export default function UserForm() {
   }>({ bmi: null, calories: null });
 
   const { setMaintenanceCalories } = useCalories();
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const savedData = await storage.getUserData();
+        if (savedData) {
+          setFormData({
+            name: savedData.name,
+            age: savedData.age,
+            gender: savedData.gender,
+            weight: savedData.weight,
+            height: savedData.height,
+            activityLevel: savedData.activityLevel,
+            goal: savedData.goal,
+          });
+          setResults({
+            bmi: savedData.bmi,
+            calories: savedData.calories,
+          });
+          setMaintenanceCalories(savedData.calories);
+        }
+      } catch (error) {
+        console.error("Failed to load user data:", error);
+      }
+    };
+    loadUserData();
+  }, []);
 
   const steps = [
     {
@@ -133,6 +162,13 @@ export default function UserForm() {
       calories: Math.round(adjustedCalories),
     });
     setMaintenanceCalories(Math.round(adjustedCalories));
+
+    // Save user data
+    storage.saveUserData({
+      ...formData,
+      bmi: Math.round(bmi * 10) / 10,
+      calories: Math.round(adjustedCalories),
+    });
   };
 
   const getBMIStatus = (
@@ -290,12 +326,29 @@ export default function UserForm() {
               </p>
             </div>
 
-            <button
-              onClick={() => setResults({ bmi: null, calories: null })}
-              className="mt-8 px-10 py-4 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all duration-300 font-bold text-lg shadow-lg hover:scale-105 transform"
-            >
-              Calculate Again
-            </button>
+            <div className="mt-12 p-8 bg-blue-500/10 rounded-xl border border-blue-500/20">
+              <h3 className="text-2xl font-bold text-white mb-4">
+                Ready to Start Tracking?
+              </h3>
+              <p className="text-gray-300 text-lg mb-6">
+                Head over to your food diary and start logging your meals to
+                reach your goals!
+              </p>
+              <div className="flex justify-center gap-4">
+                <Link
+                  href="/diary"
+                  className="px-8 py-4 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all duration-300 font-bold text-lg shadow-lg hover:scale-105 transform"
+                >
+                  Go to Food Diary
+                </Link>
+                <button
+                  onClick={() => setResults({ bmi: null, calories: null })}
+                  className="px-8 py-4 bg-gray-700 text-white rounded-xl hover:bg-gray-600 transition-all duration-300 font-bold text-lg shadow-lg"
+                >
+                  Calculate Again
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       ) : (

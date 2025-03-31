@@ -1,45 +1,34 @@
-import SignIn from "./SiginIn";
+import SignIn from "./SignIn";
 import UserDisplay from "@/components/UserDisplay";
 import Link from "next/link";
 import { auth } from "@/auth";
+import { Book } from "lucide-react";
 
 export default async function Navbar() {
   const session = await auth();
 
   return (
     <nav className="w-full bg-gray-800 text-white py-4 shadow-lg">
-      <div className="container mx-auto flex justify-between items-center px-6">
-        <h1 className="text-2xl font-bold">CaliLog</h1>
-        <ul className="flex space-x-6">
-          <li>
-            <Link href="/" className="hover:text-gray-400">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link href="/features" className="hover:text-gray-400">
-              Features
-            </Link>
-          </li>
-          <li>
-            <Link href="/about" className="hover:text-gray-400">
-              About
-            </Link>
-          </li>
-          <li>
-            <Link href="/contact" className="hover:text-gray-400">
-              Contact
-            </Link>
-          </li>
-          <li>
-            <Link href="/diary" className="hover:text-gray-400">
+      <div className="container mx-auto flex items-center px-4 md:px-8">
+        <Link
+          href="/"
+          className="text-2xl font-bold hover:text-gray-400 transition-colors"
+        >
+          CaliLog
+        </Link>
+        <div className="flex-grow" />
+        <ul className="flex items-center">
+          <li className="mr-8">
+            <Link
+              href="/diary"
+              className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg transition-all duration-300 font-medium"
+            >
+              <Book size={18} />
               Diary
             </Link>
           </li>
+          <li>{session?.user ? <UserDisplay /> : <SignIn />}</li>
         </ul>
-        <div className="flex items-center space-x-4">
-          {session?.user ? <UserDisplay /> : <SignIn />}
-        </div>
       </div>
     </nav>
   );
